@@ -7,6 +7,21 @@ import re
 from copilot import CopilotClient
 
 # ============================================================================
+# PoR Interception
+# ============================================================================
+
+POR_ABSTAIN_SIGNAL = "[[POR_ABSTAIN]]"
+
+def handle_por_event(event):
+    if event["type"] != "assistant.message":
+        return False
+    content = event["data"].get("content") or ""
+    if POR_ABSTAIN_SIGNAL in content:
+        print("🛑 Copilot abstained (PoR signal received).")
+        return True
+    return False
+
+# ============================================================================
 # Git & GitHub Detection
 # ============================================================================
 
@@ -113,6 +128,8 @@ The current working directory is: {os.getcwd()}
 
     # Set up event handling
     def handle_event(event):
+        if handle_por_event(event):
+            return
         if event["type"] == "assistant.message":
             print(f"\n🤖 {event['data']['content']}\n")
         elif event["type"] == "tool.execution_start":

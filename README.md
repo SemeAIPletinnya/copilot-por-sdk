@@ -23,6 +23,8 @@ The GitHub Copilot SDK exposes the same engine behind Copilot CLI: a production-
 
 See the individual SDK READMEs for installation, usage examples, and API reference.
 
+Python cookbook examples include a minimal Proof-of-Resonance (PoR) interception layer and recognize the explicit abstention control signal `[[POR_ABSTAIN]]` as a non-error outcome.
+
 ## Getting Started
 
 For a complete walkthrough, see the **[Getting Started Guide](./docs/getting-started.md)**.

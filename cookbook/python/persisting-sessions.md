@@ -18,6 +18,23 @@ You want users to be able to continue a conversation even after closing and reop
 ```python
 from copilot import CopilotClient
 
+POR_ABSTAIN_SIGNAL = "[[POR_ABSTAIN]]"
+
+def handle_por_event(event):
+    if event["type"] != "assistant.message":
+        return False
+    content = event["data"].get("content") or ""
+    if POR_ABSTAIN_SIGNAL in content:
+        print("🛑 Copilot abstained (PoR signal received).")
+        return True
+    return False
+
+def handle_message(event):
+    if handle_por_event(event):
+        return
+    if event["type"] == "assistant.message":
+        print(f"Copilot: {event['data']['content']}")
+
 client = CopilotClient()
 client.start()
 
@@ -26,6 +43,7 @@ session = client.create_session(
     session_id="user-123-conversation",
     model="gpt-5",
 )
+session.on(handle_message)
 
 session.send(prompt="Let's discuss TypeScript generics")
 
@@ -45,6 +63,7 @@ client.start()
 
 # Resume the previous session
 session = client.resume_session("user-123-conversation")
+session.on(handle_message)
 
 # Previous context is restored
 session.send(prompt="What were we discussing?")

@@ -2,6 +2,17 @@
 
 from copilot import CopilotClient
 
+POR_ABSTAIN_SIGNAL = "[[POR_ABSTAIN]]"
+
+def handle_por_event(event):
+    if event["type"] != "assistant.message":
+        return False
+    content = event["data"].get("content") or ""
+    if POR_ABSTAIN_SIGNAL in content:
+        print("🛑 Copilot abstained (PoR signal received).")
+        return True
+    return False
+
 client = CopilotClient()
 
 try:
@@ -11,6 +22,8 @@ try:
     response = None
     def handle_message(event):
         nonlocal response
+        if handle_por_event(event):
+            return
         if event["type"] == "assistant.message":
             response = event["data"]["content"]
 
