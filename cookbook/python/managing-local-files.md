@@ -19,6 +19,17 @@ You have a folder with many files and want to organize them into subfolders base
 from copilot import CopilotClient
 import os
 
+POR_ABSTAIN_SIGNAL = "[[POR_ABSTAIN]]"
+
+def handle_por_event(event):
+    if event["type"] != "assistant.message":
+        return False
+    content = event["data"].get("content") or ""
+    if POR_ABSTAIN_SIGNAL in content:
+        print("🛑 Copilot abstained (PoR signal received).")
+        return True
+    return False
+
 # Create and start client
 client = CopilotClient()
 client.start()
@@ -28,6 +39,8 @@ session = client.create_session(model="gpt-5")
 
 # Event handler
 def handle_event(event):
+    if handle_por_event(event):
+        return
     if event["type"] == "assistant.message":
         print(f"\nCopilot: {event['data']['content']}")
     elif event["type"] == "tool.execution_start":

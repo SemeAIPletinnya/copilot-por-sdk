@@ -18,6 +18,17 @@ You need to run multiple conversations in parallel, each with its own context an
 ```python
 from copilot import CopilotClient
 
+POR_ABSTAIN_SIGNAL = "[[POR_ABSTAIN]]"
+
+def make_por_handler(label):
+    def handle_event(event):
+        if event["type"] != "assistant.message":
+            return
+        content = event["data"].get("content") or ""
+        if POR_ABSTAIN_SIGNAL in content:
+            print(f"🛑 {label} abstained (PoR signal received).")
+    return handle_event
+
 client = CopilotClient()
 client.start()
 
@@ -27,6 +38,10 @@ session2 = client.create_session(model="gpt-5")
 session3 = client.create_session(model="claude-sonnet-4.5")
 
 # Each session maintains its own conversation history
+session1.on(make_por_handler("Session 1"))
+session2.on(make_por_handler("Session 2"))
+session3.on(make_por_handler("Session 3"))
+
 session1.send(prompt="You are helping with a Python project")
 session2.send(prompt="You are helping with a TypeScript project")
 session3.send(prompt="You are helping with a Go project")

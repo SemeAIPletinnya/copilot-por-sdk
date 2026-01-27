@@ -10,6 +10,10 @@ This folder hosts short, practical recipes for using the GitHub Copilot SDK with
 - [PR Visualization](pr-visualization.md): Generate interactive PR age charts using GitHub MCP Server.
 - [Persisting Sessions](persisting-sessions.md): Save and resume sessions across restarts.
 
+## PoR interception (minimal)
+
+Examples in this folder include a lightweight Proof-of-Resonance (PoR) interception layer. The SDK treats the explicit abstention control signal `[[POR_ABSTAIN]]` as a non-error outcome, so you can log it and continue gracefully.
+
 ## Contributing
 
 Add a new recipe by creating a markdown file in this folder and linking it above. Follow repository guidance in [CONTRIBUTING.md](../../CONTRIBUTING.md).
