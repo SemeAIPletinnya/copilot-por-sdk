@@ -25,6 +25,23 @@ See the individual SDK READMEs for installation, usage examples, and API referen
 
 Python cookbook examples include a minimal Proof-of-Resonance (PoR) interception layer and recognize the explicit abstention control signal `[[POR_ABSTAIN]]` as a non-error outcome.
 
+## PoR Interception Demo (Python)
+
+This demo shows how Proof-of-Resonance (PoR) can intercept Copilot
+generation and deliberately abstain when stability invariants are violated.
+
+Run:
+
+```bash
+python cookbook/python/por_demo.py
+```
+
+Expected behavior:
+
+Safe prompts → normal Copilot output
+
+High drift / low coherence → explicit ABSTAIN outcome
+
 ## Getting Started
 
 For a complete walkthrough, see the **[Getting Started Guide](./docs/getting-started.md)**.
